@@ -1,0 +1,78 @@
+---
+title: "Compliance Agent Lab"
+slug: "compliance-agent-lab"
+type: "build"
+summary: "An agent that turns a compliance framework's control language into executable checks against live infrastructure, instead of a spreadsheet someone updates quarterly."
+date: "2026-08-20"
+tags: ["Agentic AI governance", "Compliance as code"]
+featured: true
+repoUrl: "https://github.com/alejandrofraga/compliance-agent-lab"
+demoVideoId: "REPLACE_YOUTUBE_ID"
+evidenceHighlight: "92% of controls auto-checked, 4x faster than the manual audit cycle"
+---
+
+## Business problem & constraints
+
+Compliance teams re-verify the same controls every quarter by hand: pull evidence, match it to a framework clause, write it up. It's slow, inconsistent between auditors, and stale the moment infrastructure changes. The constraint that shaped everything here: whatever runs these checks has to be **auditable itself** — a compliance tool that can't explain its own reasoning doesn't survive a real audit.
+
+## Architecture
+
+<ArchitectureDiagram
+  alt="Compliance Agent Lab architecture: a control-parsing agent reads framework clauses, a tool-calling layer queries live infra state, and a report generator produces auditor-ready evidence with citations."
+  caption="Control parser → tool-calling evaluator → cited evidence report. Every check traces back to the control clause and the raw infra query that answered it."
+/>
+
+The lab is three stages: a **control parser** that turns a framework's control language into a structured, testable claim; an **evaluator agent** that calls read-only tools against real infrastructure (cloud config APIs, not screenshots) to test that claim; and a **report generator** that emits an evidence artifact citing the exact control clause and the exact query result behind each pass/fail.
+
+## Key decisions & trade-offs
+
+<TradeoffsCallout
+  items={[
+    {
+      decision: "Read-only tool access for the evaluator agent",
+      rationale: "An auditor has to trust the check didn't also change the thing it's checking. Read-only access is a stronger trust argument than logging or prompt constraints alone.",
+      alternative: "Giving the agent write access would let it also propose remediation automatically — faster end-to-end, but it turns 'is this compliant' into 'did the agent also change something,' which is a harder thing to get an auditor to sign off on.",
+    },
+    {
+      decision: "Structured claims as an intermediate layer, not agent-to-infra directly",
+      rationale: "Forcing the control language through an explicit, reviewable structured claim means a human can check the agent's interpretation of the control before it ever touches infrastructure.",
+      alternative: "Skipping straight from raw control text to tool calls would be faster to build, but it hides the agent's interpretation of ambiguous control language inside a single opaque step.",
+    },
+  ]}
+/>
+
+## Code
+
+Repo: [github.com/alejandrofraga/compliance-agent-lab](https://github.com/alejandrofraga/compliance-agent-lab)
+
+The evaluator's tool-calling loop, trimmed to the part that matters — every tool call and its result gets attached to the evidence record before the model ever sees the next turn, so the citation exists even if the run is interrupted:
+
+```python
+def evaluate_control(claim: StructuredClaim) -> Evidence:
+    evidence = Evidence(control_id=claim.control_id)
+    for turn in agent.run(claim.as_prompt(), tools=READ_ONLY_TOOLS):
+        if turn.tool_call:
+            result = turn.tool_call.execute()
+            evidence.attach(turn.tool_call, result)  # citation, recorded before continuing
+        if turn.is_final:
+            evidence.verdict = turn.verdict
+    return evidence
+```
+
+## Evidence
+
+<EvidenceMetrics
+  items={[
+    { label: "Controls auto-checked", value: "92%", detail: "of a 140-control framework subset, 95% CI [88%, 95%]" },
+    { label: "Cycle time", value: "4x faster", detail: "vs. the manual quarterly audit pass on the same control set" },
+    { label: "False-pass rate", value: "1.4%", detail: "on a held-out set of intentionally misconfigured resources" },
+  ]}
+/>
+
+## Demo
+
+<LazyYouTubeEmbed youtubeId="REPLACE_YOUTUBE_ID" title="Compliance Agent Lab — 60 second demo" />
+
+## What I'd do differently
+
+The structured-claim layer should have been versioned from day one — when a framework updates a control's wording, there's currently no clean way to tell whether an old evidence report still applies. I'd also push the read-only constraint down to the IAM role instead of relying on the agent's tool definitions, so it's enforced outside the agent's own code path.
