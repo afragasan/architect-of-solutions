@@ -30,7 +30,7 @@ export const videos: Video[] = [
     title: "Why I'm building my portfolio in public",
     description: "Kicking off the build log series: goals, stack, and the first commits.",
     series: "build-log",
-    publishedAt: "2026-09-01",
+    publishedAt: "2026-10-23",
   },
   {
     youtubeId: "REPLACE_YOUTUBE_ID",
@@ -38,12 +38,5 @@ export const videos: Video[] = [
     description: "What it means to treat compliance requirements as testable code instead of a document.",
     series: "explainers",
     publishedAt: "2026-08-15",
-  },
-  {
-    youtubeId: "REPLACE_YOUTUBE_ID",
-    title: "Secure Snapshot: architecture teardown",
-    description: "Walking through the immutable backup architecture behind Secure Snapshot.",
-    series: "architecture-teardowns",
-    publishedAt: "2026-08-01",
   },
 ];
