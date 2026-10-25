@@ -1,0 +1,71 @@
+---
+title: "Secure Snapshot"
+slug: "secure-snapshot"
+type: "case-study"
+summary: "Sanitized case study: designing the immutable backup architecture behind a product now protecting 1,000+ enterprise customers from ransomware-driven data loss."
+date: "2026-07-10"
+tags: ["Cyber resilience", "Compliance as code"]
+featured: false
+demoVideoId: "REPLACE_YOUTUBE_ID"
+evidenceHighlight: "1,000+ customers on immutable backup, zero recorded ransomware-driven data loss"
+---
+
+## Business problem & constraints
+
+Ransomware increasingly targets backup systems first, specifically so a victim can't recover without paying. Customers needed a backup architecture where even an attacker with admin credentials couldn't delete or encrypt existing backups. The constraint: this had to work across customers' existing heterogeneous storage backends, not require a forklift migration, and hold up under the compliance frameworks (SEC 17a-4, FINRA) that some customers were already subject to.
+
+## Architecture
+
+<ArchitectureDiagram
+  alt="Secure Snapshot architecture: write-once storage layer enforces immutability at the object-lock level, a separate credential boundary controls retention-policy changes, and a verification service periodically confirms snapshot integrity independent of the primary write path."
+  caption="Immutability enforced at the storage layer's object-lock, not the application layer — so a compromised application credential still can't delete a locked snapshot."
+/>
+
+The core decision was pushing immutability enforcement down to the storage layer's native object-lock/WORM (write-once-read-many) capability, rather than enforcing "don't delete backups" as an application-level rule. A separate credential boundary — distinct from the credentials the backup application uses day-to-day — is required to shorten a retention policy, and that boundary is logged and alertable independent of the main application.
+
+## Key decisions & trade-offs
+
+<TradeoffsCallout
+  items={[
+    {
+      decision: "Enforce immutability at the storage layer, not the application layer",
+      rationale: "An attacker who compromises the backup application's own credentials still can't touch locked snapshots, because deletion isn't an application-level permission at all — it's blocked below the application.",
+      alternative: "Application-level 'soft delete protection' would have shipped faster and worked across more storage backends uniformly, but it means the same credential that writes backups can, in principle, also be tricked into removing the protection.",
+    },
+    {
+      decision: "Separate, narrowly-scoped credential boundary for retention-policy changes",
+      rationale: "Shortening a retention window is the one legitimate action that looks identical to an attacker trying to make old backups deletable — separating and alerting on it turns a silent risk into a visible one.",
+      alternative: "Folding retention-policy changes into normal admin permissions would have meant fewer roles to manage, at the cost of losing a clean signal for 'someone is trying to make backups deletable early.'",
+    },
+  ]}
+/>
+
+## Code
+
+Sanitized — the production repository is private. The pattern below is the general shape of the retention-boundary check used across the storage layer integration:
+
+```python
+def shorten_retention(snapshot_id: str, new_retention_days: int, actor: BoundaryCredential):
+    if not actor.has_scope("retention:shorten"):
+        raise PermissionDenied("requires dedicated retention-boundary credential")
+    audit_log.emit(RetentionShortened(snapshot_id, new_retention_days, actor.id))
+    return storage.update_retention(snapshot_id, new_retention_days)
+```
+
+## Evidence
+
+<EvidenceMetrics
+  items={[
+    { label: "Customers on immutable backup", value: "1,000+", detail: "across the current deployed base" },
+    { label: "Ransomware-driven data loss", value: "0", detail: "recorded incidents since immutability enforcement shipped" },
+    { label: "Compliance frameworks satisfied", value: "SEC 17a-4, FINRA", detail: "WORM retention requirements met at the storage layer" },
+  ]}
+/>
+
+## Demo
+
+<LazyYouTubeEmbed youtubeId="REPLACE_YOUTUBE_ID" title="Secure Snapshot — architecture teardown" />
+
+## What I'd do differently
+
+I'd have pushed for the separate retention-boundary credential in the very first release instead of adding it in a follow-up — the gap between "immutable" and "immutable, with a clean audit trail for the one legitimate exception" mattered more to compliance-minded customers than the initial design gave it credit for.
