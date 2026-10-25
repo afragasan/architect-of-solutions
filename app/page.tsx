@@ -14,11 +14,12 @@ export default async function HomePage() {
       <section className="bg-brand-slate">
         <Container className="py-20">
           <h1 className="max-w-3xl font-heading text-4xl font-bold text-white sm:text-5xl">
-            Solutions Architect. I ship the system, then show you what I gave up to get it.
+            I design AI systems you can oversee, audit, and undo
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-slate-300">
-            Compliance-as-code, cyber resilience, and agentic AI systems — built, sanitized from
-            enterprise deployments, and written up with the trade-offs left in.
+            As solution architect I focus on governance and observability required for agentic AI: compliance written as code,
+            a human signature on every consequential action, and a recovery path for
+            every mistake.
           </p>
           <div className="mt-12">
             <ProofStrip />

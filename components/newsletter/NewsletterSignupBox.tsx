@@ -9,7 +9,24 @@ export function NewsletterSignupBox({ variant = "light" }: { variant?: "light" |
         isDark ? "border-white/10 bg-white/5" : "border-slate-200 bg-slate-50"
       }`}
     >
-      <p className={`font-heading text-lg font-semibold ${isDark ? "text-white" : "text-brand-slate"}`}>
+      <p
+        className={`flex items-center gap-2 font-heading text-lg font-semibold ${
+          isDark ? "text-white" : "text-brand-slate"
+        }`}
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+          className="h-6 w-6 shrink-0 text-brand-amber"
+        >
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="m3 7 9 6 9-6" />
+        </svg>
         {newsletter.publicationName}
       </p>
       <p className={`mt-1 text-sm ${isDark ? "text-slate-300" : "text-slate-600"}`}>

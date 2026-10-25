@@ -10,6 +10,7 @@ export const social = {
   x: "https://x.com/AlejandroFraga",
   linkedin: "https://www.linkedin.com/in/alejandrofraga/",
   youtube: "https://www.youtube.com/@alejandrofragasantos",
+  github: "https://github.com/afragasan",
 };
 
 // Placeholder — replace with the real Google Drive direct-download link.

@@ -6,14 +6,14 @@ export type ProofPoint = {
 export const proofStrip: ProofPoint[] = [
   {
     value: "1,000+",
-    label: "customers running on immutable backup architecture I designed",
+    label: "enterprise customer relationships across 12 years of cyber resilience carreer",
   },
   {
-    value: "30%+",
-    label: "reduction in MTTR from agentic telemetry work",
+    value: "25%+",
+    label: "reduction in TCO helping customers protect their data on public clouds",
   },
   {
-    value: "Quarterly → bi-weekly",
-    label: "customer feedback loop I helped stand up",
+    value: "30%",
+    label: "reduction in MTTR by applying telemetry analysis to predict product failures",
   },
 ];
