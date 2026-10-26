@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/data/site-config";
-import { getAllWork, getAllBlogPosts } from "@/lib/content";
+import { getAllWork } from "@/lib/content";
 import { videoSeries } from "@/data/videos";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -14,15 +14,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(entry.date),
   }));
 
-  const blogRoutes = getAllBlogPosts().map((post) => ({
-    url: `${siteConfig.url}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
-  }));
-
   const videoSeriesRoutes = Object.keys(videoSeries).map((slug) => ({
     url: `${siteConfig.url}/videos/${slug}`,
     lastModified: new Date(),
   }));
 
-  return [...staticRoutes, ...workRoutes, ...blogRoutes, ...videoSeriesRoutes];
+  return [...staticRoutes, ...workRoutes, ...videoSeriesRoutes];
 }

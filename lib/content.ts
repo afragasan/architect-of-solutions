@@ -1,6 +1,6 @@
-import { blogPosts, builds, caseStudies, type Build, type BlogPost, type CaseStudy } from "@/.velite";
-import { featuredWorkSlug, latestNewsletterIssue, latestVideo } from "@/data/latest";
-import type { NewsletterIssue } from "@/lib/types";
+import { builds, caseStudies, type Build, type CaseStudy } from "@/.velite";
+import { featuredWorkSlug } from "@/data/latest";
+import { videoSeries, videos } from "@/data/videos";
 
 export type WorkEntry = Build | CaseStudy;
 
@@ -24,33 +24,9 @@ export function getFeaturedWork(): WorkEntry | undefined {
   return getWorkBySlug(featuredWorkSlug) ?? getAllWork().find((entry) => entry.featured) ?? getAllWork()[0];
 }
 
-export function getAllBlogPosts(): BlogPost[] {
-  return [...blogPosts].sort(byDateDesc);
-}
-
-export function getBlogBySlug(slug: string): BlogPost | undefined {
-  return getAllBlogPosts().find((post) => post.slug === slug);
-}
-
-export function getBlogPostsByTag(tag: string): BlogPost[] {
-  return getAllBlogPosts().filter((post) => post.tags.includes(tag));
-}
-
-export function getAllBlogTags(): string[] {
-  return Array.from(new Set(getAllBlogPosts().flatMap((post) => post.tags))).sort();
-}
-
-export function getLatestBlogPost(): BlogPost | undefined {
-  return getAllBlogPosts()[0];
-}
-
-// Async on purpose: the v1 implementation just returns manual config, but the
-// call sites (home page) already await these, so swapping in a real YouTube
-// Data API / Beehiiv API call later needs no changes outside this file.
-export async function getLatestVideo() {
-  return latestVideo;
-}
-
-export async function getLatestNewsletterIssue(): Promise<NewsletterIssue> {
-  return latestNewsletterIssue;
+export function getLatestVideo() {
+  const latest = [...videos].sort(
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  )[0];
+  return latest && { ...latest, seriesName: videoSeries[latest.series].name };
 }

@@ -1,15 +1,16 @@
 # architect-of-solutions
 
-Source for [alejandrofraga.com](https://alejandrofraga.com) — Alejandro Fraga's portfolio, built in public. This repo is the artifact as much as the site is: every architectural decision behind the site itself gets written up on the [blog](https://alejandrofraga.com/blog).
+Source for [alejandrofraga.com](https://alejandrofraga.com) — Alejandro Fraga's portfolio, built in public. This repo is the artifact as much as the site is: every architectural decision behind the site itself gets written up in the newsletter and previewed on the [blog](https://alejandrofraga.com/blog).
 
 ## Stack
 
 - [Next.js](https://nextjs.org) (App Router) + TypeScript + Tailwind CSS v4
-- [Velite](https://velite.js.org) for schema-validated MDX content (`content/work`, `content/blog`)
-- [Beehiiv](https://www.beehiiv.com) for the newsletter
+- [Velite](https://velite.js.org) for schema-validated MDX content (`content/work`)
+- [Beehiiv](https://www.beehiiv.com) is the single place articles are published. The site pulls post teasers from its API (home, `/blog`, `/newsletter`) and links out to read them; the signup box posts to `/api/subscribe`, which calls Beehiiv server-side
+- YouTube hosts videos; the site shows thumbnails and descriptions that link out
 - Hosted on AWS Amplify
 
-No database in v1 — the site is fully static/SSG. See `data/*.ts` for the small amount of manually-configured data (latest video/newsletter issue, video series, proof-strip numbers, certifications).
+No database in v1. See `data/*.ts` for the small amount of manually-configured data (videos and series, proof-strip numbers, certifications).
 
 ## Getting started
 
@@ -24,7 +25,7 @@ npm run dev
 
 - `content/work/builds/*.mdx` — own code projects
 - `content/work/case-studies/*.mdx` — sanitized case studies
-- `content/blog/*.mdx` — blog posts
+- Articles are written in Beehiiv, not in this repo. Publish them as web + email so they get a public URL and show up here.
 
 Every Work entry (build or case study) must contain these `##` headings, in order — Velite's build-time schema check fails the build if one is missing or out of order:
 
@@ -38,7 +39,7 @@ Every Work entry (build or case study) must contain these `##` headings, in orde
 
 ## Environment variables
 
-Copy `.env.example` to `.env.local` and fill in the Beehiiv keys to enable the live newsletter archive. Without them, the newsletter archive page falls back to linking out to the public Beehiiv archive.
+Copy `.env.example` to `.env.local` and fill in `BEEHIIV_API_KEY` and `BEEHIIV_PUBLICATION_ID`. Without them, article lists show an empty state and the signup form reports an error. In Amplify, set the same variables in the console; `amplify.yml` copies them into `.env.production` so server code can read them. Once the Beehiiv custom domain is live, set `NEXT_PUBLIC_NEWSLETTER_URL=https://newsletter.alejandrofraga.com`.
 
 ## Deploying
 

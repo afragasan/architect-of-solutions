@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { WorkEntry } from "@/lib/content";
-import { LazyYouTubeEmbed } from "@/components/videos/LazyYouTubeEmbed";
+import { VideoThumbnailLink } from "@/components/videos/VideoLinkCard";
 
 export function FeaturedBuild({ entry }: { entry: WorkEntry }) {
   return (
@@ -25,7 +25,7 @@ export function FeaturedBuild({ entry }: { entry: WorkEntry }) {
       </div>
       <div>
         {entry.demoVideoId && (
-          <LazyYouTubeEmbed youtubeId={entry.demoVideoId} title={`${entry.title} — 60 second demo`} />
+          <VideoThumbnailLink youtubeId={entry.demoVideoId} title={`${entry.title} — 60 second demo`} />
         )}
       </div>
     </div>

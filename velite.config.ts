@@ -55,17 +55,6 @@ const workSchema = (type: "build" | "case-study") =>
       return data;
     });
 
-const blogSchema = s
-  .object({
-    title: s.string().max(120),
-    slug: s.slug("blog"),
-    summary: s.string().max(240),
-    date: s.isodate(),
-    tags: s.array(s.string()),
-    coverImage: s.image().optional(),
-    body: s.mdx(),
-  });
-
 export default defineConfig({
   root: "content",
   collections: {
@@ -78,11 +67,6 @@ export default defineConfig({
       name: "CaseStudy",
       pattern: "work/case-studies/**/*.mdx",
       schema: workSchema("case-study"),
-    }),
-    blogPosts: defineCollection({
-      name: "BlogPost",
-      pattern: "blog/**/*.mdx",
-      schema: blogSchema,
     }),
   },
 });
