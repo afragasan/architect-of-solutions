@@ -2,12 +2,15 @@ import { Container } from "@/components/layout/Container";
 import { ProofStrip } from "@/components/home/ProofStrip";
 import { FeaturedBuild } from "@/components/home/FeaturedBuild";
 import { LatestStrip } from "@/components/home/LatestStrip";
-import { getFeaturedWork, getLatestBlogPost, getLatestNewsletterIssue, getLatestVideo } from "@/lib/content";
+import { getBeehiivPosts } from "@/lib/beehiiv";
+import { getFeaturedWork, getLatestVideo } from "@/lib/content";
+
+export const revalidate = 3600;
 
 export default async function HomePage() {
   const featured = getFeaturedWork();
-  const latestPost = getLatestBlogPost();
-  const [latestVideo, latestIssue] = await Promise.all([getLatestVideo(), getLatestNewsletterIssue()]);
+  const latestPosts = ((await getBeehiivPosts(3)) ?? []).slice(0, 3);
+  const latestVideo = getLatestVideo();
 
   return (
     <>
@@ -39,7 +42,7 @@ export default async function HomePage() {
         <Container className="py-16">
           <h2 className="font-heading text-xl font-bold text-brand-slate">Latest</h2>
           <div className="mt-6">
-            <LatestStrip latestPost={latestPost} latestVideo={latestVideo} latestIssue={latestIssue} />
+            <LatestStrip posts={latestPosts} latestVideo={latestVideo} />
           </div>
         </Container>
       </section>

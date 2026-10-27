@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const entry = getWorkBySlug(slug);
   if (!entry) return {};
-  return buildMetadata({ title: entry.title, description: entry.summary, path: `/work/${entry.slug}` });
+  return buildMetadata({ title: entry.title, description: entry.summary, path: `/blueprints/${entry.slug}` });
 }
 
 export default async function WorkEntryPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -4,6 +4,8 @@ frontend:
     preBuild:
       commands:
         - npm ci
+        # Amplify SSR only exposes env vars to server code via .env.production
+        - env | grep -e BEEHIIV_ -e NEXT_PUBLIC_ >> .env.production || true
     build:
       commands:
         - npm run build

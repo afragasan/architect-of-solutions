@@ -1,7 +1,43 @@
+"use client";
+
+import { useState, type FormEvent } from "react";
 import { newsletter } from "@/data/site-config";
 
-export function NewsletterSignupBox({ variant = "light" }: { variant?: "light" | "dark" }) {
+type Status = "idle" | "submitting" | "success" | "error";
+
+export function NewsletterSignupBox({
+  variant = "light",
+  source = "footer",
+}: {
+  variant?: "light" | "dark";
+  source?: "footer";
+}) {
   const isDark = variant === "dark";
+  const [status, setStatus] = useState<Status>("idle");
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    setStatus("submitting");
+
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: data.get("email"),
+          website: data.get("website"),
+          source,
+        }),
+      });
+      if (!res.ok) throw new Error("subscribe failed");
+      form.reset();
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
+  }
 
   return (
     <div
@@ -30,22 +66,23 @@ export function NewsletterSignupBox({ variant = "light" }: { variant?: "light" |
         {newsletter.publicationName}
       </p>
       <p className={`mt-1 text-sm ${isDark ? "text-slate-300" : "text-slate-600"}`}>
-        Notes on architecture, trade-offs, and agentic AI governance — sent every other week.
+        Notes on architecture, trade-offs, and agentic AI governance, straight to your inbox.
       </p>
-      {newsletter.embedSrc ? (
-        <iframe
-          src={newsletter.embedSrc}
-          title={`Subscribe to ${newsletter.publicationName}`}
-          className="mt-4 h-24 w-full border-0"
-          scrolling="no"
-        />
+
+      {status === "success" ? (
+        <p role="status" className={`mt-4 text-sm font-medium ${isDark ? "text-white" : "text-brand-slate"}`}>
+          Thanks! Check your inbox to confirm your subscription.
+        </p>
       ) : (
-        <form
-          action={newsletter.archiveUrl}
-          method="get"
-          target="_blank"
-          className="mt-4 flex flex-col gap-2 sm:flex-row"
-        >
+        <form onSubmit={onSubmit} className="mt-4 flex flex-col gap-2 sm:flex-row">
+          <input
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            className="hidden"
+          />
           <input
             type="email"
             name="email"
@@ -60,11 +97,27 @@ export function NewsletterSignupBox({ variant = "light" }: { variant?: "light" |
           />
           <button
             type="submit"
-            className="shrink-0 rounded-md bg-brand-amber px-4 py-2 text-sm font-semibold text-brand-slate transition hover:bg-brand-amber-dark hover:text-white"
+            disabled={status === "submitting"}
+            className="shrink-0 rounded-md bg-brand-amber px-4 py-2 text-sm font-semibold text-brand-slate transition hover:bg-brand-amber-dark hover:text-white disabled:opacity-60"
           >
-            Subscribe
+            {status === "submitting" ? "Subscribing…" : "Subscribe"}
           </button>
         </form>
+      )}
+
+      {status === "error" && (
+        <p role="alert" className={`mt-2 text-sm ${isDark ? "text-amber-300" : "text-red-700"}`}>
+          Something went wrong. Please try again, or subscribe directly on{" "}
+          <a
+            href={newsletter.archiveUrl}
+            target="_blank"
+            rel="noopener"
+            className="underline"
+          >
+            Beehiiv
+          </a>
+          .
+        </p>
       )}
     </div>
   );

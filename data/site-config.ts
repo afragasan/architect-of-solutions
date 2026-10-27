@@ -20,9 +20,8 @@ export const resumeUrl = "https://drive.google.com/uc?export=download&id=REPLACE
 export const bookingUrl = "https://cal.com/alejandrofraga";
 
 export const newsletter = {
-  publicationName: "The Architect's Notes",
-  archiveUrl: "https://alejandrofraga.beehiiv.com",
-  embedSrc: process.env.NEXT_PUBLIC_BEEHIIV_EMBED_ID
-    ? `https://embeds.beehiiv.com/${process.env.NEXT_PUBLIC_BEEHIIV_EMBED_ID}`
-    : undefined,
+  publicationName: "Architect of Solutions",
+  // Switch to https://newsletter.alejandrofraga.com via env once the Beehiiv custom domain is live.
+  archiveUrl: process.env.NEXT_PUBLIC_NEWSLETTER_URL ?? "https://alejandros-newsletter-b805f0.beehiiv.com",
+  siteUrl: siteConfig.url,
 };
