@@ -17,7 +17,7 @@ export function LatestStrip({ posts, latestVideo }: { posts: NewsletterPost[]; l
       <div>
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
           <h3 className="text-xs font-semibold tracking-wide text-brand-amber-dark uppercase">Latest articles</h3>
-          <Link href="/blog" className="shrink-0 text-sm font-medium text-brand-amber-dark hover:underline">
+          <Link href="/newsletter"className="shrink-0 text-sm font-medium text-brand-amber-dark hover:underline">
             All articles →
           </Link>
         </div>

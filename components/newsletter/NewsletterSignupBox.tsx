@@ -10,7 +10,7 @@ export function NewsletterSignupBox({
   source = "footer",
 }: {
   variant?: "light" | "dark";
-  source?: "footer" | "newsletter-page";
+  source?: "footer";
 }) {
   const isDark = variant === "dark";
   const [status, setStatus] = useState<Status>("idle");

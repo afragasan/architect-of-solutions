@@ -5,12 +5,12 @@ import { getAllWork } from "@/lib/content";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Work",
+  title: "Blueprints",
   description: "Builds and sanitized case studies — the business problem, the architecture, and the trade-offs behind each one.",
-  path: "/work",
+  path: "/blueprints",
 });
 
-export default async function WorkPage({
+export default async function BlueprintsPage({
   searchParams,
 }: {
   searchParams: Promise<{ type?: string }>;
@@ -20,7 +20,7 @@ export default async function WorkPage({
 
   return (
     <Container className="py-16">
-      <h1 className="font-heading text-3xl font-bold text-brand-slate">Work</h1>
+      <h1 className="font-heading text-3xl font-bold text-brand-slate">Blueprints</h1>
       <p className="mt-3 max-w-2xl text-slate-600">
         Own builds and sanitized case studies from production work, every entry following the same
         template: problem, architecture, trade-offs, code, evidence, demo, and what I&apos;d do differently.

@@ -4,7 +4,7 @@ import type { WorkEntry } from "@/lib/content";
 export function WorkEntryCard({ entry }: { entry: WorkEntry }) {
   return (
     <Link
-      href={`/work/${entry.slug}`}
+      href={`/blueprints/${entry.slug}`}
       className="group block rounded-lg border border-slate-200 p-6 transition hover:border-brand-amber hover:shadow-sm"
     >
       <span className="text-xs font-semibold tracking-wide text-brand-amber-dark uppercase">

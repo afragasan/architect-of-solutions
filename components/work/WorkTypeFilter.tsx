@@ -8,10 +8,10 @@ const FILTERS = [
 
 export function WorkTypeFilter({ active }: { active?: string }) {
   return (
-    <nav className="flex flex-wrap gap-2" aria-label="Filter work by type">
+    <nav className="flex flex-wrap gap-2" aria-label="Filter blueprints by type">
       {FILTERS.map((filter) => {
         const isActive = active === filter.value;
-        const href = filter.value ? `/work?type=${filter.value}` : "/work";
+        const href = filter.value ? `/blueprints?type=${filter.value}` : "/blueprints";
         return (
           <Link
             key={filter.label}

@@ -4,10 +4,9 @@ import { MobileNav } from "@/components/layout/MobileNav";
 import { siteConfig } from "@/data/site-config";
 
 const NAV_LINKS = [
-  { href: "/work", label: "Work" },
-  { href: "/blog", label: "Blog" },
-  { href: "/videos", label: "Videos" },
+  { href: "/blueprints", label: "Blueprints" },
   { href: "/newsletter", label: "Newsletter" },
+  { href: "/videos", label: "Videos" },
   { href: "/about", label: "About" },
 ];
 

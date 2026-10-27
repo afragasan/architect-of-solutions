@@ -1,12 +1,12 @@
 # architect-of-solutions
 
-Source for [alejandrofraga.com](https://alejandrofraga.com) — Alejandro Fraga's portfolio, built in public. This repo is the artifact as much as the site is: every architectural decision behind the site itself gets written up in the newsletter and previewed on the [blog](https://alejandrofraga.com/blog).
+Source for [alejandrofraga.com](https://alejandrofraga.com) — Alejandro Fraga's portfolio, built in public. This repo is the artifact as much as the site is: every architectural decision behind the site itself gets written up in the newsletter and previewed on the [newsletter page](https://alejandrofraga.com/newsletter).
 
 ## Stack
 
 - [Next.js](https://nextjs.org) (App Router) + TypeScript + Tailwind CSS v4
 - [Velite](https://velite.js.org) for schema-validated MDX content (`content/work`)
-- [Beehiiv](https://www.beehiiv.com) is the single place articles are published. The site pulls post teasers from its API (home, `/blog`, `/newsletter`) and links out to read them; the signup box posts to `/api/subscribe`, which calls Beehiiv server-side
+- [Beehiiv](https://www.beehiiv.com) is the single place articles are published. The site pulls post teasers from its API (home and `/newsletter`) and links out to read them; the signup box posts to `/api/subscribe`, which calls Beehiiv server-side
 - YouTube hosts videos; the site shows thumbnails and descriptions that link out
 - Hosted on AWS Amplify
 

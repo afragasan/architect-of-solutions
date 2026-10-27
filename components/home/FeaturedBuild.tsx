@@ -17,7 +17,7 @@ export function FeaturedBuild({ entry }: { entry: WorkEntry }) {
           </p>
         )}
         <Link
-          href={`/work/${entry.slug}`}
+          href={`/blueprints/${entry.slug}`}
           className="mt-6 inline-block rounded-md bg-brand-slate px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-slate-light"
         >
           Read the full write-up →

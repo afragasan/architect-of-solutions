@@ -1,7 +1,7 @@
 import { subscribeToBeehiiv } from "@/lib/beehiiv";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const MEDIUMS = new Set(["footer", "newsletter-page"]);
+const MEDIUMS = new Set(["footer"]);
 
 export async function POST(request: Request) {
   let body: { email?: unknown; source?: unknown; website?: unknown };
